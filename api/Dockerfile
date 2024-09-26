@@ -13,5 +13,6 @@ RUN pip install fastapi-cors
 #copy the contents of local directory to the working directory
 COPY .  .
 
+EXPOSE 8000
 #CMD ["fastapi", "run", "api/main.py", "80"]
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
