@@ -1,12 +1,17 @@
 FROM python:3.9
 
-WORKDIR /app
+#set the working directory
+WORKDIR /usr/src/app
 
-COPY requirements.txt /app/requirements.txt
+#copy dependency files to the working directory
+COPY requirements.txt ./
 
-RUN pip install -r /app/requirements.txt && mkdir api
+#Installing dependencies
+RUN pip install --no-cache -r requirements.txt
+RUN pip install fastapi-cors
 
-COPY . /app/api/
+#copy the contents of local directory to the working directory
+COPY .  .
 
 #CMD ["fastapi", "run", "api/main.py", "80"]
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
