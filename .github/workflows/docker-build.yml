@@ -1,1 +1,31 @@
+name: Publish Docker Images
+
+on:
+  [workflow_dispatch]
+  # push:
+  #   branches: [ "master", "develop" ]
+  # pull_request:
+  #   branches: [ "master", "develop" ]
+
+jobs:
+
+  publish_image:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build Backend Image
+      run: docker build ./api/ -t adrashxprojects/qr_backend:latest
+    - name: Login to DockerHub
+      run : echo "Login completed !!"
+    - name: Push Backend Image To Repository
+      run: |
+        docker push adrashxprojects/qr_backend:latest
+        if [ $? -eq 0 ]; then
+          echo "Docker Image Pushed Successfully"
+        fi
+
+
 
