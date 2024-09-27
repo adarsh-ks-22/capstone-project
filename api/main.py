@@ -13,6 +13,7 @@ app = FastAPI()
 
 # Allowing CORS for local testing
 origins = [
+    #"http://localhost:3000"
     "http://localhost:3000"
 ]
 
