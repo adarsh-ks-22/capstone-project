@@ -19,7 +19,9 @@ jobs:
     - name: Build Backend Image
       run: docker build ./api/ -t adrashxprojects/qr_backend:latest
     - name: Login to DockerHub
-      run : echo "Login completed !!"
+      run : |
+        docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+        echo "Login completed !!"
     - name: Push Backend Image To Repository
       run: |
         docker push adrashxprojects/qr_backend:latest
