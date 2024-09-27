@@ -26,3 +26,6 @@ jobs:
         if [ $? -eq 0 ]; then
           echo "Docker Image Pushed Successfully"
         fi
+
+
+
