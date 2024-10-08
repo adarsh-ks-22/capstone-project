@@ -1,9 +1,14 @@
 name: Publish Docker Images
 
 on:
-  [workflow_dispatch]
-  # push:
-  #   branches: [ "master", "develop" ]
+  push:
+    branches:
+      - master
+      - develop
+      - pipeline_integration
+    paths:
+      - 'api/Dockerfile'
+      - 'front-end-nextjs/Dockerfile'
   # pull_request:
   #   branches: [ "master", "develop" ]
 
@@ -16,16 +21,39 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Build Backend Image
-      run: docker build ./api/ -t adrashxprojects/qr_backend:latest
+    - name: Build Images
+      run: |
+        docker build ./api/ -t adrashxprojects/qr_backend:latest
+        if [ $? -eq 0 ]; then
+          echo "Backend Docker Image created successfully!!"
+        else
+          echo "Error building backend image"
+        fi
+
+        docker build ./front-end-nextjs/ -t adrashxprojects/qr_frontend:latest
+        if [ $? -eq 0 ]; then
+          echo "Frontend Docker Image created successfully!!"
+        else
+          echo "Error building frontend image"
+        fi
+        
     - name: Login to DockerHub
-      run : echo "Login completed !!"
+      run : |
+        docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+        echo "Login completed !!"
+
     - name: Push Backend Image To Repository
       run: |
         docker push adrashxprojects/qr_backend:latest
         if [ $? -eq 0 ]; then
-          echo "Docker Image Pushed Successfully"
+          echo "Backend Docker Image Pushed Successfully"
+        else
+          echo "Error pushing image !!!"
         fi
 
-
-
+        docker push adrashxprojects/qr_frontend:latest
+        if [ $? -eq 0 ]; then
+          echo "Frontend Docker Image Pushed Successfully"
+        else
+          echo "Error pushing image !!!"
+        fi
